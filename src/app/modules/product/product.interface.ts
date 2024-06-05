@@ -1,5 +1,6 @@
+//creating interface
 export type TVariants = {
-  type: 'size' | 'color' | 'style';
+  type: string;
   value: string;
 };
 

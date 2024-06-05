@@ -1,14 +1,15 @@
-import { Schema, model, connect } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { TInventory, TProduct, TVariants } from './product.interface';
 
+//creating schema
 const variantsSchema = new Schema<TVariants>({
-  type: { type: String, enum: ['size', 'color', 'style'], required: true },
+  type: { type: String, required: true },
   value: { type: String, required: true },
 });
 
 const inventorySchema = new Schema<TInventory>({
   quantity: { type: Number, required: true },
-  inStock: { type: Boolean, required: true },
+  inStock: { type: Boolean, default: true, required: true },
 });
 
 const productSchema = new Schema<TProduct>({
@@ -21,4 +22,5 @@ const productSchema = new Schema<TProduct>({
   inventory: { type: inventorySchema, required: true },
 });
 
+//creating model
 export const Product = model<TProduct>('Product', productSchema);
