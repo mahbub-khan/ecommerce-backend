@@ -1,4 +1,4 @@
-import { array, z } from 'zod';
+import { z } from 'zod';
 
 const alphanumeric = /^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/;
 

@@ -91,7 +91,7 @@ const updateProduct = async(req: Request, res: Response) => {
 
     const zodParsedData = productValidationSchema.parse(updatedProductData)
 
-    const result = await ProductServices.updateProductInDB(productId,zodParsedData);
+    await ProductServices.updateProductInDB(productId,zodParsedData);
 
     
     res.status(200).json({
@@ -123,10 +123,10 @@ const deleteProduct = async(req: Request, res: Response) => {
       data: result,
     });
 
-  } catch (err: any) {
+  } catch (err) {
     res.status(500).json({
       success: false,
-      message: err.name || 'Something went wrong',
+      message: 'Something went wrong',
       error: err,
     });
   }
