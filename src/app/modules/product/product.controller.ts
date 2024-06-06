@@ -28,21 +28,39 @@ const createProduct = async (req: Request, res: Response) => {
 };
 
 const getAllProducts = async (req: Request, res: Response) => {
-  try {
-    const result = await ProductServices.getAllProductsFromDB();
+  const searchTerm = req.query.searchTerm as string | undefined;
+  try{
+    if(searchTerm){
 
-    //send response
-    res.status(200).json({
-      success: true,
-      message: 'Products fetched successfully!',
-      data: result,
-    });
-  } catch (err) {
+      const result = await ProductServices.searchProductsFromDB(searchTerm)
+  
+      //send response
+      res.status(200).json({
+        success: true,
+        message: result.length > 0 ? `Products matching search term: ${searchTerm} fetched successfully!`:
+        `No products found matching search term: ${searchTerm}`,
+        data: result,
+      });
+      
+    } else {
+      const result = await ProductServices.getAllProductsFromDB();
+  
+      //send response
+      res.status(200).json({
+        success: true,
+        message: 'Products fetched successfully!',
+        data: result,
+      });
+  
+    }
+
+  }catch(err){
     res.status(500).json({
       success: false,
       message: 'Something went wrong',
       error: err,
     });
+
   }
 };
 
@@ -114,6 +132,7 @@ const deleteProduct = async(req: Request, res: Response) => {
   }
 
 }
+
 
 export const ProductControllers = {
   createProduct,

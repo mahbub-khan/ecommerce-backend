@@ -11,9 +11,8 @@ app.use(cors());
 app.use('/api/products', ProductRoutes);
 
 app.get('/', (req: Request, res: Response) => {
-  const a = 10;
 
-  res.send(a);
+  res.send('Hi, Welcome to my App');
 });
 
 export default app;

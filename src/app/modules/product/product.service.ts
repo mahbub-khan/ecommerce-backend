@@ -26,10 +26,22 @@ const deleteProductFromDB = async(_id: string) => {
   return result;
 } 
 
+const searchProductsFromDB = async(searchTerm:string) => {
+  const query = {$or : [
+    {name: {$regex: searchTerm, $options: 'i'}},
+    {description: {$regex: searchTerm, $options: 'i'}},
+    {category: {$regex: searchTerm, $options: 'i'}},
+  ]}
+  
+  const result = await Product.find(query);
+  return result;
+}
+
 export const ProductServices = {
   createProductIntoDB,
   getAllProductsFromDB,
   getSingleProductFromDB,
   updateProductInDB,
-  deleteProductFromDB
+  deleteProductFromDB,
+  searchProductsFromDB
 };
