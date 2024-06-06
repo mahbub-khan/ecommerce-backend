@@ -9,16 +9,16 @@ const variantsSchema = new Schema<TVariants>({
 
 const inventorySchema = new Schema<TInventory>({
   quantity: { type: Number, required: true },
-  inStock: { type: Boolean, default: true, required: true },
+  inStock: { type: Boolean, required: true },
 });
 
 const productSchema = new Schema<TProduct>({
   name: { type: String, required: true },
   description: { type: String, required: true },
-  price: { type: Number },
+  price: { type: Number, required: true },
   category: { type: String, required: true },
-  tags: { type: [String], default: undefined, required: true },
-  variants: { type: [variantsSchema], default: undefined, required: true },
+  tags: { type: [String], required: true },
+  variants: { type: [variantsSchema], required: true },
   inventory: { type: inventorySchema, required: true },
 });
 
