@@ -104,17 +104,6 @@ const updateProduct = async (req: Request, res: Response) => {
   }
 };
 
-const updateInventoryQuantity = async (req: Request, res: Response) => {
-  try{
-    const {orderedProductId,orderedQuantity} = req.params;
-    console.log(req.params);
-
-    await ProductServices.updateInventoryQuantityInDB(orderedProductId,Number(orderedQuantity))
-
-  } catch(err){
-
-  }
-}
 
 const deleteProduct = async (req: Request, res: Response) => {
   try {
@@ -142,5 +131,4 @@ export const ProductControllers = {
   getSingleProduct,
   updateProduct,
   deleteProduct,
-  updateInventoryQuantity
 };

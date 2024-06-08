@@ -21,14 +21,7 @@ const updateProductInDB = async (_id: string, product: TProduct) => {
   return result;
 };
 
-const updateInventoryQuantityInDB = async (_id:string, newQuantity: Number)=>{
-  const result = await Product.updateOne({_id}, {
-    $set: {
-      'inventory.quantity': newQuantity,
-    }
-  })
-  return result
-}
+
 const deleteProductFromDB = async (_id: string) => {
   const result = await Product.deleteOne({ _id });
   return result;
@@ -54,5 +47,4 @@ export const ProductServices = {
   updateProductInDB,
   deleteProductFromDB,
   searchProductsFromDB,
-  updateInventoryQuantityInDB
 };

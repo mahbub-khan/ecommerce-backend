@@ -2,11 +2,7 @@ import { Request, Response } from 'express';
 import { orderValidationSchema } from './order.validation';
 import {  OrderServices } from './order.service';
 import { ProductServices } from '../product/product.service';
-import express from 'express';
-import { ProductControllers } from '../product/product.controller';
 import { Product } from '../product/product.model';
-
-const router = express.Router();
 
 const createOrder = async (req: Request, res: Response) => {
   try {
@@ -16,24 +12,24 @@ const createOrder = async (req: Request, res: Response) => {
     const zodParsedOrder = orderValidationSchema.parse(orderData);
 
     const productId = zodParsedOrder.productId;
+
+    //retrieving the product according to the order from Product DB
     const orderedProduct = await ProductServices.getSingleProductFromDB(productId)
-    
+
     if(!orderedProduct){
       throw new Error (`No such product available with this id: ${productId}. Check again`);
     }
-    //console.log(orderedProduct._id.toString());
+    
 
-    // if(productId !== orderedProduct._id.toString()){
-    //   throw new Error (`No such product available with this id: ${productId}. Check again`)
-    // }
+    //ensuring price matching
+    if(zodParsedOrder.price !== orderedProduct.price){
+      throw new Error ("Ordered price doesn't match with the product price");
+    }
 
+    //ensuring inventory quantity matching
     if(zodParsedOrder.quantity > orderedProduct.inventory.quantity){
-      
       throw new Error ('Insufficient quantity available in inventory');
     }
-    // else {
-    //   router.put('/:orderedProductId/:orderedQuantity', ProductControllers.updateInventoryQuantity);
-    // }
 
     //update inventory quantity
     await Product.updateOne(
@@ -51,13 +47,8 @@ const createOrder = async (req: Request, res: Response) => {
       )
     }
 
-    //checking and modifying inventory quantity
-    //if(zodParsedOrder.quantity > orderedProduct?.inventory.quantity)
-
 
     const result = await OrderServices.createOrderIntoDB(zodParsedOrder);
-    
-
     
 
     //send response
@@ -69,12 +60,8 @@ const createOrder = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message || 'Something went wrong',
-      error: {
-        name: err.name,
-        message: err.message,
-        stack: err.stack,
-      },
+      message: err.issues ? err.issues[0].message :  (err.message || 'Something went wrong'),
+      error: err
     });
   }
 };
