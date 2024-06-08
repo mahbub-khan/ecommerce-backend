@@ -40,7 +40,7 @@ const createOrder = async (req: Request, res: Response) => {
     //set instock to false if quantity is <=0
     const updatedProduct = await Product.findById(productId);
 
-    if(updatedProduct?.inventory.quantity <= 0){
+    if(updatedProduct?.inventory && updatedProduct?.inventory.quantity <= 0){
       await Product.updateOne(
         {_id: productId},
         {$set: {'inventory.inStock': false}}
