@@ -29,38 +29,35 @@ const createProduct = async (req: Request, res: Response) => {
 
 const getAllProducts = async (req: Request, res: Response) => {
   const searchTerm = req.query.searchTerm as string | undefined;
-  try{
-    if(searchTerm){
+  try {
+    if (searchTerm) {
+      const result = await ProductServices.searchProductsFromDB(searchTerm);
 
-      const result = await ProductServices.searchProductsFromDB(searchTerm)
-  
       //send response
       res.status(200).json({
         success: true,
-        message: result.length > 0 ? `Products matching search term: ${searchTerm} fetched successfully!`:
-        `No products found matching search term: ${searchTerm}`,
+        message:
+          result.length > 0
+            ? `Products matching search term: ${searchTerm} fetched successfully!`
+            : `No products found matching search term: ${searchTerm}`,
         data: result,
       });
-      
     } else {
       const result = await ProductServices.getAllProductsFromDB();
-  
+
       //send response
       res.status(200).json({
         success: true,
         message: 'Products fetched successfully!',
         data: result,
       });
-  
     }
-
-  }catch(err){
+  } catch (err) {
     res.status(500).json({
       success: false,
       message: 'Something went wrong',
       error: err,
     });
-
   }
 };
 
@@ -84,22 +81,20 @@ const getSingleProduct = async (req: Request, res: Response) => {
   }
 };
 
-const updateProduct = async(req: Request, res: Response) => {
+const updateProduct = async (req: Request, res: Response) => {
   try {
-    const {productId} = req.params;
+    const { productId } = req.params;
     const { product: updatedProductData } = req.body;
 
-    const zodParsedData = productValidationSchema.parse(updatedProductData)
+    const zodParsedData = productValidationSchema.parse(updatedProductData);
 
-    await ProductServices.updateProductInDB(productId,zodParsedData);
+    await ProductServices.updateProductInDB(productId, zodParsedData);
 
-    
     res.status(200).json({
       success: true,
       message: 'Product updated successfully!',
       data: zodParsedData,
     });
-
   } catch (err: any) {
     res.status(500).json({
       success: false,
@@ -107,22 +102,31 @@ const updateProduct = async(req: Request, res: Response) => {
       error: err,
     });
   }
+};
 
+const updateInventoryQuantity = async (req: Request, res: Response) => {
+  try{
+    const {orderedProductId,orderedQuantity} = req.params;
+    console.log(req.params);
+
+    await ProductServices.updateInventoryQuantityInDB(orderedProductId,Number(orderedQuantity))
+
+  } catch(err){
+
+  }
 }
 
-const deleteProduct = async(req: Request, res: Response) => {
+const deleteProduct = async (req: Request, res: Response) => {
   try {
-    const {productId} = req.params;
+    const { productId } = req.params;
 
     const result = await ProductServices.deleteProductFromDB(productId);
 
-    
     res.status(200).json({
       success: true,
       message: 'Product deleted  successfully!',
       data: result,
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -130,14 +134,13 @@ const deleteProduct = async(req: Request, res: Response) => {
       error: err,
     });
   }
-
-}
-
+};
 
 export const ProductControllers = {
   createProduct,
   getAllProducts,
   getSingleProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  updateInventoryQuantity
 };

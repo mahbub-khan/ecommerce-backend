@@ -16,26 +16,36 @@ const getSingleProductFromDB = async (_id: string) => {
   return result;
 };
 
-const updateProductInDB = async(_id: string,product: TProduct) => {
-  const result = await Product.updateOne({_id},product);
+const updateProductInDB = async (_id: string, product: TProduct) => {
+  const result = await Product.updateOne({ _id }, product);
   return result;
-} 
+};
 
-const deleteProductFromDB = async(_id: string) => {
-  const result = await Product.deleteOne({_id});
+const updateInventoryQuantityInDB = async (_id:string, newQuantity: Number)=>{
+  const result = await Product.updateOne({_id}, {
+    $set: {
+      'inventory.quantity': newQuantity,
+    }
+  })
+  return result
+}
+const deleteProductFromDB = async (_id: string) => {
+  const result = await Product.deleteOne({ _id });
   return result;
-} 
+};
 
-const searchProductsFromDB = async(searchTerm:string) => {
-  const query = {$or : [
-    {name: {$regex: searchTerm, $options: 'i'}},
-    {description: {$regex: searchTerm, $options: 'i'}},
-    {category: {$regex: searchTerm, $options: 'i'}},
-  ]}
-  
+const searchProductsFromDB = async (searchTerm: string) => {
+  const query = {
+    $or: [
+      { name: { $regex: searchTerm, $options: 'i' } },
+      { description: { $regex: searchTerm, $options: 'i' } },
+      { category: { $regex: searchTerm, $options: 'i' } },
+    ],
+  };
+
   const result = await Product.find(query);
   return result;
-}
+};
 
 export const ProductServices = {
   createProductIntoDB,
@@ -43,5 +53,6 @@ export const ProductServices = {
   getSingleProductFromDB,
   updateProductInDB,
   deleteProductFromDB,
-  searchProductsFromDB
+  searchProductsFromDB,
+  updateInventoryQuantityInDB
 };
