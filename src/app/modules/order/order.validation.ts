@@ -11,8 +11,7 @@ export const orderValidationSchema = z.object({
       message: 'Order quantity should be an integer number',
     })
     .int({
-      message:
-        'Order quantity should be an integer number [>=0 and <=1500]',
+      message: 'Order quantity should be an integer number [>=0 and <=1500]',
     })
     .gt(0, {
       message: 'Order quantity must be greater than 0',

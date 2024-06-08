@@ -6,7 +6,7 @@ import { Product } from '../product/product.model';
 
 const createOrder = async (req: Request, res: Response) => {
   try {
-    const { order: orderData } = req.body;
+    const  orderData = req.body;
 
     //order data validation with zod
     const zodParsedOrder = orderValidationSchema.parse(orderData);
@@ -46,7 +46,6 @@ const createOrder = async (req: Request, res: Response) => {
         {$set: {'inventory.inStock': false}}
       )
     }
-
 
     const result = await OrderServices.createOrderIntoDB(zodParsedOrder);
     

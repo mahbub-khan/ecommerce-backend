@@ -4,7 +4,8 @@ import { productValidationSchema } from './product.validation';
 
 const createProduct = async (req: Request, res: Response) => {
   try {
-    const { product: productData } = req.body;
+    //const { product: productData } = req.body;
+    const productData = req.body;
 
     //product data validation with zod
     const zodParsedData = productValidationSchema.parse(productData);
@@ -21,7 +22,9 @@ const createProduct = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.name || 'Something went wrong',
+      message: err.issues
+        ? `Validation Error: ${err.issues[0].message}`
+        : err.message || 'Something went wrong',
       error: err,
     });
   }
@@ -84,7 +87,8 @@ const getSingleProduct = async (req: Request, res: Response) => {
 const updateProduct = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
-    const { product: updatedProductData } = req.body;
+    //const { product: updatedProductData } = req.body;
+    const updatedProductData = req.body;
 
     const zodParsedData = productValidationSchema.parse(updatedProductData);
 
@@ -104,22 +108,21 @@ const updateProduct = async (req: Request, res: Response) => {
   }
 };
 
-
 const deleteProduct = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
 
-    const result = await ProductServices.deleteProductFromDB(productId);
+    await ProductServices.deleteProductFromDB(productId);
 
     res.status(200).json({
       success: true,
       message: 'Product deleted  successfully!',
-      data: result,
+      data: null,
     });
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Something went wrong',
+      message: "Couldn't find any products with this id",
       error: err,
     });
   }

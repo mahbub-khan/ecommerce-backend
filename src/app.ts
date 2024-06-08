@@ -15,13 +15,13 @@ app.use('/api/products', ProductRoutes);
 app.use('/api/orders', OrderRoutes);
 
 //undefined routes
-app.use((req: Request, res: Response)=>{
-  const error = new Error("Route not found")
+app.use((req: Request, res: Response) => {
+  const error = new Error('Route not found');
   res.status(404).json({
     success: false,
-    message: error.message
-  })
-})
+    message: error.message,
+  });
+});
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hi, Welcome to my App');

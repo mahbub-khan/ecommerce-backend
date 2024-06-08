@@ -88,13 +88,7 @@ export const productValidationSchema = z.object({
     ),
   tags: z
     .array(
-      z
-        .string()
-        .max(15, { message: 'Each tag must be 15 characters or less' })
-        .regex(
-          alphanumeric,
-          'Tag should only contain letters[a-z, A-z] or numbers[0-9]',
-        ),
+      z.string().max(15, { message: 'Each tag must be 15 characters or less' }),
     )
     .nonempty({ message: 'At least one tag is required' }),
   variants: z

@@ -21,7 +21,6 @@ const updateProductInDB = async (_id: string, product: TProduct) => {
   return result;
 };
 
-
 const deleteProductFromDB = async (_id: string) => {
   const result = await Product.deleteOne({ _id });
   return result;
