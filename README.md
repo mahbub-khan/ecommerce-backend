@@ -126,7 +126,7 @@ Link: https://ecommerce-backend-express-mongoose.vercel.app/api/orders?email= pa
 
 Method: GET
 
-- You'll get response for undefined routes as well. For example: https://ecommerce-backend-express-mongoose.vercel.app/api/orderss 
+#### You'll get response for undefined routes as well. For example: https://ecommerce-backend-express-mongoose.vercel.app/api/orderss 
 
 Select GET method and send a request. You will get a response like this:
 
